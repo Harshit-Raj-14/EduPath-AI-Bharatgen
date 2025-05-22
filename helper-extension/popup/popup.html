@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Text Utilities</title>
+  <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <div class="control-group">
+      <label for="font-size">Font Size:</label>
+      <input type="range" id="font-size" min="8" max="32" value="16">
+      <span id="font-size-value">16px</span>
+    </div>
+    
+    <div class="control-group">
+      <button id="bionic-reading">Toggle Bionic Reading</button>
+    </div>
+    
+    <div class="control-group">
+      <button id="text-to-speech">Read Aloud</button>
+      <button id="stop-speech">Stop Reading</button>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
