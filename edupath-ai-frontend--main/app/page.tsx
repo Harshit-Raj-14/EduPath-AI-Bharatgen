@@ -191,7 +191,7 @@ export default function Home() {
                     title: "AI Mock-Interviewer",
                     description:
                       "Practice for your class vivas and ace your technical interviews with our intelligent conversation partner.",
-                    link: "http://localhost:5173/mock-viva",
+                    link: "http://localhost:4000/category",
                   },
                   {
                     icon: GiVrHeadset,

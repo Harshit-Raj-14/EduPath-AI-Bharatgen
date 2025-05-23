@@ -85,15 +85,15 @@ export default function Dashboard() {
       title: "Data Science",
       description: "Learn data analysis and machine learning fundamentals.",
       icon: HiChartBar,
-      route:
-        "/dashboard/take-course/data-science?desc=Comprehensive%20data%20science%20and%20analytics%20course",
+      route: "https://seedofcode-ai-course-generator.vercel.app/dashboard",
+      // route: "/dashboard/take-course/data-science?desc=Comprehensive%20data%20science%20and%20analytics%20course",
     },
     {
       id: 3,
       title: "Generate Custom Course",
       description: "Create your own personalized learning path.",
       icon: HiLightningBolt,
-      route: "/dashboard/take-course",
+      route: "https://seedofcode-ai-course-generator.vercel.app/dashboard",
     },
   ];
 
@@ -155,7 +155,7 @@ export default function Dashboard() {
               active={true}
               className="dark:text-white"
             >
-              Leaderboard
+              Profile
             </NavbarLink>
             <NavbarLink
               href="#"
@@ -184,47 +184,6 @@ export default function Dashboard() {
               </p>
               {/* <p className="text-sm opacity-75">{formattedDate}</p> */}
             </motion.div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Learning Points Progress Graph */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="md:col-span-2"
-              >
-                <Card className="shadow-lg dark:bg-gray-800">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                    <HiChartBar className="text-purple-600" />
-                    Your Progress
-                  </h2>
-                  <Line data={learningPointsData} />
-                </Card>
-              </motion.div>
-
-              {/* Pending Courses */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-              >
-                <Card className="shadow-lg dark:bg-gray-800 h-full">
-                  <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                    <HiClipboardList className="text-purple-600" />
-                    Pending Courses
-                  </h2>
-                  <ul className="space-y-3">
-                    {pendingCourses.map((course, index) => (
-                      <li
-                        key={index}
-                        className="flex items-center gap-2 text-gray-700 dark:text-gray-300"
-                      >
-                        <div className="w-2 h-2 rounded-full bg-purple-600"></div>
-                        {course}
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              </motion.div>
-            </div>
 
             {/* Courses Showcase */}
             <motion.div

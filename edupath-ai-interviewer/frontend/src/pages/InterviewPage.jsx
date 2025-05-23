@@ -9,6 +9,7 @@ import SpeechRecognition, {
 import { useNavigate } from "react-router-dom";
 import { LOCAL_URL } from "../api";
 import Loader from "../components/ui/Loader";
+import CodeEditorModal from "../components/CodeEditorModal";
 
 export default function InterviewPage() {
   const navigate = useNavigate();
@@ -19,8 +20,11 @@ export default function InterviewPage() {
     user: false,
     interviewer: false,
   });
+  const [isCodeEditorOpen, setIsCodeEditorOpen] = useState(false);
+  const [timer, setTimer] = useState(0); // Timer in seconds
   const isRun = useRef(false);
   const speechSynthesisRef = useRef(null);
+  const timerRef = useRef(null);
 
   const {
     transcript,
@@ -29,11 +33,34 @@ export default function InterviewPage() {
     browserSupportsSpeechRecognition,
   } = useSpeechRecognition();
 
+  // Timer functionality
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setTimer(prev => prev + 1);
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+
+  // Format timer display
+  const formatTimer = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
   // Cleanup function for speech synthesis
   useEffect(() => {
     return () => {
       if (speechSynthesisRef.current) {
         speechSynthesis.cancel();
+      }
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
       }
     };
   }, []);
@@ -109,6 +136,27 @@ export default function InterviewPage() {
     }
   };
 
+  const handleOpenCodeEditor = () => {
+    setIsCodeEditorOpen(true);
+  };
+
+  const handleCloseCodeEditor = () => {
+    setIsCodeEditorOpen(false);
+  };
+
+  const handleEndInterview = () => {
+    // Clear timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    // Stop any ongoing speech
+    if (speechSynthesisRef.current) {
+      speechSynthesis.cancel();
+    }
+    // Navigate to feedback
+    navigate("/feedback");
+  };
+
   function speak(text) {
     // Cancel any ongoing speech
     speechSynthesis.cancel();
@@ -153,7 +201,20 @@ export default function InterviewPage() {
       {loading ? (
         <Loader text="EduPath is generating your conversation. Almost there...." />
       ) : (
-        <div className={interviewStyles.interviewLayout}>
+                  <div className={interviewStyles.interviewLayout}>
+          {/* Timer and End Interview Button */}
+          <div className={interviewStyles.topRightControls}>
+            <div className={interviewStyles.timer}>
+              {formatTimer(timer)}
+            </div>
+            <button
+              onClick={handleEndInterview}
+              className={`${interviewStyles.endInterviewButton} ${interviewStyles.topEndButton}`}
+            >
+              End Interview
+            </button>
+          </div>
+
           <div className={interviewStyles.interviewLHS}>
             <div
               className={`${interviewStyles.sectionBackground} ${interviewStyles.interviewerSection}`}
@@ -201,6 +262,13 @@ export default function InterviewPage() {
                 >
                   Stop answering
                 </button>
+                <button
+                  onClick={handleOpenCodeEditor}
+                  className={`${interviewStyles.intervieweeControlButton} ${interviewStyles.codeEditorButton}`}
+                  disabled={isInterviewerSpeaking}
+                >
+                  Write Code
+                </button>
               </div>
             </div>
           </div>
@@ -218,6 +286,11 @@ export default function InterviewPage() {
               <p className={interviewStyles.sectionContent}>{transcript}</p>
             </div>
           </div>
+
+          {/* Code Editor Modal */}
+          {isCodeEditorOpen && (
+            <CodeEditorModal onClose={handleCloseCodeEditor} />
+          )}
         </div>
       )}
     </>
